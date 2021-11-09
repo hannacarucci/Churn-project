@@ -39,7 +39,9 @@ sum(is.na(WA_Telco_Customer_Churn))
 data <- WA_Telco_Customer_Churn[,-1]
 data <- data[,-20]
 
-# Quickly create dummy (binary) columns from character and factor type columns in the input data
+# Create dummy variables (A  variable can only assume the values 0 and 1, where 0 indicates the absence of the property, 
+# and 1 indicates the presence of the same) so that we can easily manipulate those predictors that will not be significant in our model. 
+# Warning: overfitting!
 
 new_data <- fastDummies::dummy_cols(data)
 new_data <- new_data[,-1:-18]
