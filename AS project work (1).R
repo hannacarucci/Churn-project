@@ -15,7 +15,7 @@ library(corrplot)
 library(caret) # to perform train-test split
 
 
-# Import the dataset to R
+# Import the dataset in R
 
 WA_Telco_Customer_Churn <- read_delim("WA_Telco_Customer_Churn.csv", 
                                       delim = ";", escape_double = FALSE, trim_ws = TRUE)
@@ -24,20 +24,24 @@ summary(WA_Telco_Customer_Churn)
 # ------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------
 # PRELIMINARY ANALYSIS
-# 1. Control for missing data in our dataset
+
+# 1. Control for missing values (NA) in our dataset
 
 WA_Telco_Customer_Churn <- na.omit(WA_Telco_Customer_Churn)
 
-# Look at the number of NA values in the new dataset to be sure they have been correctly removed
+
+# Look at the number of NA in the new dataset to be sure they have been correctly removed
 
 sum(is.na(WA_Telco_Customer_Churn))
+
 
 # Remove the customer ID and churn variables since they have no role in our regression analysis
 
 data <- WA_Telco_Customer_Churn[,-1]
 data <- data[,-20]
 
-# Create dummy variables (A  variable can only assume the values 0 and 1, where 0 indicates the absence of the property, 
+
+# Create dummy variables (a variable can only assume the values 0 and 1, where 0 indicates the absence of the property, 
 # and 1 indicates the presence of the same) so that we can easily manipulate those predictors that will not be significant in our model. 
 # Warning: overfitting!
 
@@ -54,18 +58,22 @@ z <- c(-3,-5,-7,-9,-12,-15,-18,-21,-24,-27,-30,-33,-36,-38,-42)
 new_data_nocol <- new_data[,z]
 view(new_data_nocol) 
 
+
+
 # ------------------------------------------------------------------------------------------------------
 # 2. Analysis of correlation between the predictors
 
 cor <- as.matrix(round(cor(new_data_nocol[,-1]),3))
 ggcorrplot(cor, type = "lower", insig = "blank")
 
+
 # From the correlation matrix we see that the categorical variables with value No_internet_service
-# are perfectly correlated.Also, if there is no phone service the variable multiple line
+# are perfectly correlated. Also, if there is no phone service the variable multiple line
 # is perfectly correlated with the PhoneService_No. We remove these variables.
 
 n <- c(-7,-11,-13,-15,-17,-19,-20)
 new_data_nocol <- new_data_nocol[,n] 
+
 
 # Plot the new correlation matrix
 
@@ -74,8 +82,6 @@ ggcorrplot(cor, type = "lower", insig = "blank")
 
 # The matrix shows only mild correlations left in our predictors.
 # These are now ready to be used in our regression analysis.
-
-# Create interaction variables for later use.
 
 
 
@@ -151,6 +157,8 @@ test <- new_data_nocol[-train_ind, ]
 y_train <- as.vector(train[,1]) 
 x_train <- as.vector(train[,21])
 
+
+
 # -------------------------------------------------------------------------------------------------------
 # -------------------------------------------------------------------------------------------------------
 # TRAINING
@@ -185,7 +193,6 @@ vif(linear_model_AIC) # No variables with VIF>10.
 
 # The results are definitely better. 
  
-
 
 # External validity of the model:
 # Are there non-linear relationships? 
@@ -223,6 +230,7 @@ summary(linear_model_AIC2)
 # since we have included polynomial functions of the predictors in the
 # regression model
 
+
                    
 # --------------------------------------------------------------------------------------------------------
 # --------------------------------------------------------------------------------------------------------
@@ -231,7 +239,6 @@ library(ggplot2)
 library(olsrr)
 
 ols_plot_resid_qq(linear_model_AIC2) # Building the graph for testing normality assumption 
-
 
 ols_plot_resid_fit(linear_model_AIC2) # Not so constant variance.
 # More generally, the non-random pattern in the residuals indicates that the predictor variables 
@@ -244,7 +251,6 @@ ols_plot_resid_fit(linear_model_AIC2) # Not so constant variance.
 # 4. The presence of correlation between errors and predictors 
 
 ols_plot_resid_hist(linear_model_AIC2) # Residual histogram, this will show residual distribution 
-
 
 
 
