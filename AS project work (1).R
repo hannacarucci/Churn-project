@@ -1,6 +1,4 @@
-
 # Import necessary libraries
-
 
 library(ggcorrplot) # to have a graphical visualization of the correlation matrix
 library(fastDummies) # to transform categorical variables into dummy ones
@@ -198,7 +196,7 @@ plot(x_train$tenure, unlist(y_train), pch = 16,
 abline(non_linear_model, lwd = 3, lty = 2, col = 2)
 
 # The red line represents the linear regression fit. 
-# There is a pronounced relationship between mpg and horsepower, but it seems clear that 
+# There is a pronounced relationship between TotalCharges and tenure, but it seems clear that 
 # this relationship is  non-linear: the data suggest a curved relationship. 
 
 # A simple approach for incorporating non-linear associations in a linear model is to
