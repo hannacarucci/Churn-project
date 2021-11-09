@@ -111,7 +111,27 @@ for (i in seq(0,0.5,0.1)) {
 BoxCox <- function(x,lambda) {(x^(lambda)-1)/lambda}
 hist(BoxCox(y_random,0.3), breaks = 50)
 new_data_nocol$TotalCharges <- BoxCox(new_data_nocol$TotalCharges,0.3)
-hist(new_data_nocol$TotalCharges, breaks = 50)
+
+# Histogram
+p_hist <- new_data_nocol %>% 
+  ggplot(aes(x = new_data_nocol$TotalCharges, y = ..density.., color = I("gray"), fill = I("grey20"))) + geom_histogram(bins = 50) +
+  theme_bw() +
+  theme(text = element_text(size = 10), axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank(), axis.title.y = element_blank())
+
+# Boxplot
+p_box <- new_data_nocol %>% 
+  ggplot(aes(x = new_data_nocol$TotalCharges, color = I("grey20"), fill = I("gray"))) + geom_boxplot() +
+  theme_bw() +
+  theme(text = element_text(size = 10), axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank())
+
+# Put together for a nice visualization
+cowplot::plot_grid(p_box, p_hist, nrow = 2, ncol = 1)
+
+# Still not normal, but definitely better.
+
+
 
 # ------------------------------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------------------------------
