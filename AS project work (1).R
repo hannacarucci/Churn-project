@@ -218,6 +218,8 @@ plot(non_linear_model, which = 1) # Inspect the residuals VS fitted values...
 
 linear_model_AIC2 = update(linear_model_AIC, ~.+I(tenure^(1/2)))
 summary(linear_model_AIC2)
+linear_model_AIC2 = update(linear_model_AIC, ~.+-Partner_No)
+summary(linear_model_AIC2)
 
 # The quadratic fit appears to be substantially better 
 # than the fit obtained when just the
